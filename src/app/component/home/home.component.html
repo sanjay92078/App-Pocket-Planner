@@ -1,0 +1,153 @@
+<!-- Container Wrapper -->
+<div class="home-container">
+
+  <!-- Navigation and Header -->
+  <div class="nav-hello">
+    <img src="assets/images/logo2.png" alt="Logo" class="logo" />
+    <h3 class="nav-greet">
+      Hello, <br />
+      <span class="nav-name">{{ getname() }}!</span>
+    </h3>
+    <button class="logout-button" (click)="logout()">Logout</button>
+  </div>
+
+  <!-- Current Balance Card -->
+  <div class="current-balance-card">
+    <div>
+      <div class="balance-label">Current Balance</div>
+      <div class="balance-value">{{ currentBalance | currency }}</div>
+    </div>
+  </div>
+
+  <!-- Summary Cards: Total Income & Expenses -->
+  <div style="display: flex; justify-content: space-evenly;">
+    <div class="summary-card income">
+      <span class="summary-icon">💰</span>
+      <div class="summary-content">
+        <div class="summary-title">Total Income</div>
+        <div class="summary-amount">{{ totalIncome | currency }}</div>
+        <div class="summary-subtext">This Month</div>
+      </div>
+      <span class="summary-menu">⋮</span>
+    </div>
+
+    <div class="summary-card expense">
+      <span class="summary-icon">💸</span>
+      <div class="summary-content">
+        <div class="summary-title">Total Expenses</div>
+        <div class="summary-amount">{{ totalExpenses | currency }}</div>
+        <div class="summary-subtext">This Month</div>
+      </div>
+      <span class="summary-menu">⋮</span>
+    </div>
+  </div>
+
+  <!-- Dashboard Summary -->
+  <section class="dashboard-summary">
+    <h2 class="heading">Dashboard Summary</h2>
+    <div class="summary-cards">
+      <div class="summary-cards-income-exp">Average Income (Monthly): {{ avgIncome | currency }}</div>
+      <div class="summary-cards-income-exp">Average Expense (Monthly): {{ avgExpense | currency }}</div>
+    </div>
+  </section>
+
+  <!-- Chart Section (Bar Chart) -->
+  <section class="chart-section">
+    <h2 class="heading">Transaction Chart</h2>
+    <ngx-charts-bar-vertical [results]="pieChartData" [scheme]="colorScheme" [xAxis]="true" [yAxis]="true"
+      [legend]="false" [showDataLabel]="true" [gradient]="false" [roundEdges]="true">
+    </ngx-charts-bar-vertical>
+  </section>
+
+  <br /><br />
+
+  <!-- Transaction Entry Form -->
+  <section class="transaction-entry">
+    <h2 class="heading">Add Transaction</h2>
+    <form [formGroup]="transactionForm" (ngSubmit)="addTransaction()">
+      <input formControlName="amount" type="number" placeholder="Amount" />
+
+      <select formControlName="type">
+        <option value="Income">Income</option>
+        <option value="Expense">Expense</option>
+      </select>
+
+      <!-- Dynamic category based on type -->
+      <select formControlName="category">
+        <option value="">Categories</option>
+        <option *ngFor="let cat of categories" [value]="cat">
+          {{ cat }}
+        </option>
+      </select>
+
+      <input formControlName="date" type="date" />
+
+      <textarea formControlName="description" placeholder="Description (optional)"></textarea>
+
+      <button type="submit" [disabled]="transactionForm.invalid">Add</button>
+    </form>
+  </section>
+
+  <br /><br />
+
+  <!-- Transaction History Section -->
+  <section class="transaction-history">
+    <h2 class="heading">Transaction History</h2>
+
+    <!-- Filters for transactions -->
+    <div class="filters">
+      <select [(ngModel)]="filterType" (change)="filterTransactions()">
+        <option value="">All</option>
+        <option value="Income">Income</option>
+        <option value="Expense">Expense</option>
+      </select>
+
+      <select [(ngModel)]="filterCategory" (change)="filterTransactions()">
+        <option value="">All Categories</option>
+        <option *ngFor="let cat of uniqueCategories" [value]="cat">{{ cat }}</option>
+      </select>
+
+
+      <input type="date" [(ngModel)]="filterStartDate" (change)="filterTransactions()" />
+      <input type="date" [(ngModel)]="filterEndDate" (change)="filterTransactions()" />
+
+      <select [(ngModel)]="sortField" (change)="sortTransactions()">
+        <option value="date">Date</option>
+        <option value="amount">Amount</option>
+      </select>
+      <select [(ngModel)]="sortDirection" (change)="sortTransactions()">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+    </div>
+
+    <!-- Transactions table -->
+    <div class="table-vertical-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of filteredTransactions">
+            <td>{{ tx.date | date }}</td>
+            <td>{{ tx.type }}</td>
+            <td>{{ tx.category }}</td>
+            <td>{{ tx.amount | currency }}</td>
+            <td>{{ tx.description }}</td>
+            <td>
+              <button (click)="editTransaction(tx)">Edit</button>
+              <button (click)="deleteTransaction(tx)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
