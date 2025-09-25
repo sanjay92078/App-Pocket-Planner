@@ -101,21 +101,28 @@ h2 {
 
 .current-balance-card {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   background: linear-gradient(120deg, #ece9e6, #a1c4fd 100%);
   border-radius: 1.25rem;
   padding: 1.3rem 2rem;
-  min-width: 280px;
+  min-width: 0;              // Allow shrinking
+  width: 100%;               // Allow card to fit to parent
+  box-sizing: border-box;    // Include padding in width
   box-shadow: 0 4px 24px 0 rgba(60, 60, 120, 0.10);
   margin: 2rem 0;
+  overflow: hidden;          // Prevent overflow
+  word-break: break-word;    // Break long numbers/words
 }
 
 .balance-label {
   color: #646579;
-  font-size: 0.98rem;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  flex: 1 1 60%;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .balance-value {
@@ -123,7 +130,33 @@ h2 {
   font-weight: 700;
   color: #252248;
   letter-spacing: 2px;
+  flex: 1 1 40%;
+  min-width: 0;
+  text-align: right;
+  overflow-wrap: break-word;
 }
+
+/* Responsive adjustment for very narrow screens */
+@media (max-width: 500px) {
+  .current-balance-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .balance-label,
+  .balance-value {
+    font-size: 1.2rem;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.6rem;
+  }
+  .balance-value {
+    font-size: 1.8rem;
+    margin-bottom: 0; /* reset margin if needed */
+  }
+}
+
 
 // total income 
 .summary-card {

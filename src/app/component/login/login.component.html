@@ -1,13 +1,14 @@
 <div class="wrapper-center">
   <div class="form-container">
-    
-    <!-- Glassmorphism logo container -->
+
     <div class="logo-glassmorphism">
       <img src="assets/images/logo2.png" alt="Logo" class="login-logo" />
     </div>
 
     <p class="title">Login</p>
+
     <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
       <div class="input-group">
         <label for="email">Email</label>
         <input type="text" id="email" formControlName="email" placeholder="" name="email" />
@@ -19,13 +20,13 @@
         <div class="forgot"></div>
       </div>
 
-      <br />
       <button class="sign" type="submit">Sign in</button>
+
     </form>
 
     <p class="signup">
       Don't have an account?
-      <a rel="noopener noreferrer" href="http://localhost:4200/register" class="">Sign up</a>
+      <a [routerLink]="['/register']" rel="noopener noreferrer">Sign up</a>
     </p>
 
     <div *ngIf="loginError" style="color:rgb(242, 238, 238); margin-top:10px;">

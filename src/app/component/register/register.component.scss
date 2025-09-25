@@ -70,13 +70,14 @@
 }
 
 .input-group input {
-  width: 100%;
-  border-radius: 2px;
+  width: 90%;
+  border-radius: 0.375rem;
   border: 1px solid rgba(55, 65, 81, 1);
   outline: 0;
   background-color: rgba(17, 24, 39, 1);
   padding: 0.75rem 1rem;
   color: rgba(243, 244, 246, 1);
+  transition: border-color 0.3s;
 }
 
 .input-group input:focus {
